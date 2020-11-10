@@ -7,6 +7,9 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1k6jox0FrycbL21sJ861pdIq5Sq" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -26,10 +29,17 @@
       <option name="presentableId" value="Default" />
       <updated>1605028118867</updated>
       <workItem from="1605028128194" duration="593000" />
+      <workItem from="1605029947195" duration="6874000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="391" y="50" width="583" height="656" key="find.popup" timestamp="1605030921228">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="391" y="50" width="583" height="656" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1605030921228" />
   </component>
 </project>
