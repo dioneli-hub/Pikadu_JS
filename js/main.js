@@ -47,19 +47,22 @@ const setUsers = {
     console.log('log out')
   },
   signUp(email, password, handler){
+
+/*    if (!email.trim() || !password.trim()) {
+      alert('Введите данные!');
+      return ;
+    }*/
+
     if(!this.getUser(email)){
       const user = {email, password, displayName: email.split('@')[0]}
       listUsers.push(user);
-      this.authorizedUser();
+      this.authorizedUser(user);
       handler();
     } else {
       alert('Пользователь с таким email уже зарегистрирован');
     }
   },
   getUser(email) {
-
-    console.log('111');
-    let user = null;
     return listUsers.find((item) =>
       item.email === email);
     },
@@ -70,27 +73,32 @@ const setUsers = {
 
 const toggleAuthDom = () => {
   const user = setUsers.user;
+  console.log("user: ", user);
 
   if(user){
     loginElem.style.display = 'none';
-    userElem.style.display = '';
+    userElem.style.display = 'flex';
     userNameElem.textContent = user.displayName;
   } else {
-    loginElem.style.display = '';
+    loginElem.style.display = 'block';
     userElem.style.display = 'none';
   }
 }
 
-loginForm.addEventListener('click', (event) => {
+loginForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  console.log('login form el');
-
-  setUsers.logIn(emailInput.value, passwordInput.value, toggleAuthDom);
+  const emailValue = emailInput.value.trim();
+  const passwordValue = passwordInput.value.trim();
+  setUsers.logIn(emailValue, passwordValue, toggleAuthDom)
+ // loginForm.reset();
 });
 
 loginSignUp.addEventListener('click', (event) => {
   event.preventDefault();
   console.log('sign up el');
+  const emailValue = emailInput.value.trim();
+  const passwordValue = passwordInput.value.trim();
+  setUsers.signUp(emailValue, passwordValue, toggleAuthDom);
+});
 
-  setUsers.signUp(emailInput.value, passwordInput.value, toggleAuthDom);
-})
+toggleAuthDom();
