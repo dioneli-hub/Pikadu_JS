@@ -12,29 +12,27 @@ const loginForm = document.querySelector('.login-form');
 const emailInput = document.querySelector('.login-email');
 const passwordInput = document.querySelector('.login-password');
 const loginSignUp = document.querySelector('.login-sign-up');
-
 const userElem = document.querySelector('.user');
 const userNameElem = document.querySelector('.user-name');
-
 const exitElem = document.querySelector('.exit');
 const editElem = document.querySelector('.edit');
 const editContainer = document.querySelector('.edit-container');
-
 const editUsername = document.querySelector('.edit-username');
 const editPhotoURL = document.querySelector('.edit-photo');
 const userAvatarElem = document.querySelector('.user-avatar');
-
 const postsWrapper = document.querySelector('.posts');
+const buttonNewPost = document.querySelector('.button-new-post');
+const addPostElem = document.querySelector('.add-post');
 
 const listUsers = [
     {
         email: 'vprockopchuk@pikadu.com',
-        password: 11111111,
+        password: '11111111',
         displayName: 'Сказочник',
     },
     {
         email: 'dlevchenkok@pikadu.com',
-        password: 22222222,
+        password: '22222222',
         displayName: 'Лёва',
     },
 ];
@@ -105,7 +103,7 @@ const setPosts = {
             title: 'Заголовлок поста1',
             text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что ротмаленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему      букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его  снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первуюподпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составительагентство чтовопроса ведущими о решила одна алфавит!',
             tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-            author: 'dioneli@js.com',
+            author: {displayName: 'Di', photo: 'https://cdnimg.rg.ru/img/content/168/10/26/kotik_d_850_d_850.jpg'},
             date: '11.11.2020, 20:54:00',
             like: 15,
             comments: 4,
@@ -114,7 +112,7 @@ const setPosts = {
             title: 'Заголовлок поста2',
             text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что ротмаленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему      букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его  снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первуюподпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составительагентство чтовопроса ведущими о решила одна алфавит!',
             tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-            author: 'lovelyVadimka@js.com',
+            author: {displayName: 'Vadim', photo: 'https://cdnimg.rg.ru/img/content/168/10/26/kotik_d_850_d_850.jpg'},
             date: '10.11.2020, 20:54:00',
             like: 14,
             comments: 7,
@@ -129,13 +127,22 @@ const toggleAuthDom = () => {
 
     if (user) {
         loginElem.style.display = 'none';
-        userElem.style.display = 'flex';
+        userElem.style.display = '';
         userNameElem.textContent = user.displayName;
         userAvatarElem.src = user.photo || userAvatarElem.src;
+        buttonNewPost.classList.add('visible');
     } else {
-        loginElem.style.display = 'block';
+        loginElem.style.display = '';
         userElem.style.display = 'none';
+        buttonNewPost.classList.remove('visible');
+        addPostElem.classList.remove('visible');
+        postsWrapper.classList.add('visible');
     }
+};
+
+const showAddPost = () => {
+    addPostElem.classList.add('visible');
+    postsWrapper.classList.remove('visible');
 }
 
 const showAllPosts = () => {
@@ -149,8 +156,8 @@ const showAllPosts = () => {
                 <h2 class="post-title">${title}</h2>
                 <p class="post-text">${text}</p>
                 <div class="tags">
-                    ${tags.map((tag)=> 
-                        `<a href="#" class="tag">#${tag}</a>`).join(' ')}
+                    ${tags.map((tag) =>
+            `<a href="#" class="tag">#${tag}</a>`).join(' ')}
                 </div>
             </div>
             <div class="post-footer">
@@ -181,10 +188,10 @@ const showAllPosts = () => {
                 <!-- /.post-buttons -->
                 <div class="post-author">
                     <div class="author-about">
-                        <a href="#" class="author-username">${author}</a>
+                        <a href="#" class="author-username">${author.displayName}</a>
                         <span class="post-time">${date}</span>
                     </div>
-                    <a href="#" class="author-link"><img src="img/avatar.jpeg" alt="avatar" class="author-avatar"></a>
+                    <a href="#" class="author-link"><img src=${author.photo || 'img/avatar.jpeg'} alt="avatar" class="author-avatar"></a>
                 </div>
             </div>
         </section>`
@@ -192,9 +199,17 @@ const showAllPosts = () => {
     postsWrapper.innerHTML = postsHTML;
 };
 
+
+
 const init = () => {
+
     showAllPosts();
     toggleAuthDom();
+
+    buttonNewPost.addEventListener('click', event => {
+        event.preventDefault();
+        showAddPost();
+    });
 
     loginForm.addEventListener('submit', (event) => {
         event.preventDefault();

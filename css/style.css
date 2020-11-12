@@ -112,7 +112,12 @@ body {
 }
 
 .posts {
+    display: none;
     width: 67%;
+}
+
+.posts.visible {
+    display: block;
 }
 
 .post {
@@ -197,6 +202,7 @@ body {
     height: 34px;
     margin-left: 9px;
     border-radius: 4px;
+    object-fit: cover;
 }
 
 .author-username {
@@ -433,11 +439,15 @@ body {
 }
 
 .button-new-post {
-    display: none; /*flex;*/
+    display: none;
     align-items: center;
     justify-content: center;
     width: 100%;
     margin-top: 20px;
+}
+
+.button-new-post.visible {
+    display: flex;
 }
 
 .icon-fire {
@@ -516,16 +526,23 @@ body {
 }
 
 .add-post {
-    display: flex;
+    display: none;
     flex-direction: column;
+    width: 67%;
+}
+
+.add-post.visible {
+    display: flex;
 }
 
 .add-title,
-.add-text {
+.add-text,
+.add-tags{
     background: #ffffff;
     border: 1px solid #e8e8e8;
     padding: 23px 30px;
     margin-bottom: 16px;
+    resize: none;
 }
 
 .add-text {
