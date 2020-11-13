@@ -1,3 +1,17 @@
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyDvqXaFgFPef0IEHuj3cjiza-_IpnIojXI",
+    authDomain: "pikadu-55291.firebaseapp.com",
+    databaseURL: "https://pikadu-55291.firebaseio.com",
+    projectId: "pikadu-55291",
+    storageBucket: "pikadu-55291.appspot.com",
+    messagingSenderId: "46518785458",
+    appId: "1:46518785458:web:ea43eaf257d356e1df80ab",
+    measurementId: "G-L13482CFCE"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 // Создаем переменную, в которую положим кнопку меню
 let menuToggle = document.querySelector('#menu-toggle');
 // Создаем переменную, в которую положим меню
