@@ -118,6 +118,25 @@ const setPosts = {
             comments: 7,
         },
     ],
+    addPost(title, text, tags, handler) {
+
+        this.allPosts.unshift({
+            title,
+            text,
+            tags: tags.split(',').map(item => item.trim()),
+            author: {
+                displayName: setUsers.user.displayName,
+                photo: setUsers.user.photo,
+            },
+            date: new Date().toLocaleString(),
+            like: 0,
+            comments: 0,
+        })
+
+        if (handler) {
+            handler();
+        }
+    }
 
 }
 
@@ -146,6 +165,9 @@ const showAddPost = () => {
 }
 
 const showAllPosts = () => {
+
+    addPostElem.classList.remove('visible');
+    postsWrapper.classList.add('visible');
 
     let postsHTML = '';
 
@@ -245,7 +267,29 @@ const init = () => {
     menuToggle.addEventListener('click', function (event) {
         event.preventDefault();
         menu.classList.toggle('visible');
-    })
+    });
+
+    addPostElem.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const formElements = addPostElem.elements;
+        console.log(formElements);
+        const {title, text, tags} = formElements;
+        console.log(title, text, tags);
+        if (title.value.left < 4){
+            alert('Слишком короткий заголовок');
+            return ;
+        }
+        if (text.value.left < 30){
+            alert('Слишком короткий пост');
+            return ;
+        }
+
+        setPosts.addPost(title.value, text.value, tags.value, showAllPosts);
+        addPostElem.classList.remove('visible');
+        addPostElem.reset();
+
+    });
 }
 
 document.addEventListener('DOMContentLoaded', init);
