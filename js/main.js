@@ -1,5 +1,3 @@
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: "AIzaSyDvqXaFgFPef0IEHuj3cjiza-_IpnIojXI",
     authDomain: "pikadu-55291.firebaseapp.com",
@@ -10,17 +8,12 @@ const firebaseConfig = {
     appId: "1:46518785458:web:ea43eaf257d356e1df80ab",
     measurementId: "G-L13482CFCE"
 };
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-// Создаем переменную, в которую положим кнопку меню
-let menuToggle = document.querySelector('#menu-toggle');
-// Создаем переменную, в которую положим меню
-let menu = document.querySelector('.sidebar');
-// отслеживаем клик по кнопке меню и запускаем функцию 
-
 
 const regExpValidEmail = /^\w+@\w+\.\w{2,}$/;
 
+let menuToggle = document.querySelector('#menu-toggle');
+let menu = document.querySelector('.sidebar');
 const loginElem = document.querySelector('.login');
 const loginForm = document.querySelector('.login-form');
 const emailInput = document.querySelector('.login-email');
@@ -273,8 +266,8 @@ const init = () => {
 
     editContainer.addEventListener('submit', event => {
         event.preventDefault();
-
         setUsers.editUser(editUsername.value, editPhotoURL.value, toggleAuthDom);
+        editContainer.reset();
         editContainer.classList.remove('visible');
     });
 
