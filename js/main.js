@@ -8,7 +8,10 @@ const firebaseConfig = {
     appId: "1:46518785458:web:ea43eaf257d356e1df80ab",
     measurementId: "G-L13482CFCE"
 };
+
 firebase.initializeApp(firebaseConfig);
+
+console.log(firebase);
 
 const regExpValidEmail = /^\w+@\w+\.\w{2,}$/;
 
@@ -33,12 +36,12 @@ const addPostElem = document.querySelector('.add-post');
 
 const listUsers = [
     {
-        email: 'vprockopchuk@pikadu.com',
+        email: 'vprokopchuk@pikadu.com',
         password: '11111111',
         displayName: 'Сказочник',
     },
     {
-        email: 'dlevchenkok@pikadu.com',
+        email: 'dlevchenko@pikadu.com',
         password: '22222222',
         displayName: 'Лёва',
     },
@@ -47,24 +50,46 @@ const listUsers = [
 const setUsers = {
 
     user: null,
+    initUser(handler) {
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                this.user = user;
+            } else {
+                this.user = null;
+            }
+            if (handler) {
+                handler();
+            }
+        });
+    },
+
+
 
     logIn(email, password, handler) {
         if (!regExpValidEmail.test(email))
             return alert('email не валиден!');
 
-        const user = this.getUser(email);
-
-        if (user && user.password === password) {
-            this.authorizedUser(user);
-            handler();
-        } else {
-            alert('Пользователя с такими данными не существует')
-        }
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            //.then((data) => this.user = data.user)
+            //.then(handler)
+            .catch( err => {
+                const errCode = err.code;
+                const errMessage = err.message;
+                if (errCode === 'auth/wrong-password'){
+                    console.log(errMessage);
+                    alert('Неверный пароль');
+                } else if(errCode === 'auth/user-not-found'){
+                    console.log(errMessage);
+                    alert('Пользователь не найден');
+                } else {
+                    alert(errMessage);
+                }
+                console.log(err);
+            });
     },
 
-    logOut(handler) {
-        this.user = null;
-        handler();
+    logOut() {
+        firebase.auth().signOut();
     },
 
     signUp(email, password, handler) {
@@ -75,30 +100,60 @@ const setUsers = {
             return alert('Введите данные!');
         }
 
-        if (!this.getUser(email)) {
+        firebase.auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(data => {
+                this.editUser(email.split('@')[0], null, handler)
+            })
+            .catch((err) => {
+                const errCode = err.code;
+                const errMessage = err.message;
+                if (errCode === 'auth/weak-password'){
+                    console.log(errMessage);
+                    alert('Слабый пароль');
+                } else if(errCode === 'auth/email-already-in-use'){
+                    console.log(errMessage);
+                    alert('Этот email уже используется');
+                } else {
+                    alert(errMessage);
+                }
+
+                console.log(err);
+            });
+
+        /*if (!this.getUser(email)) {
             const user = {email, password, displayName: email.split('@')[0]}
             listUsers.push(user);
             this.authorizedUser(user);
             handler();
         } else {
             alert('Пользователь с таким email уже зарегистрирован');
+        }*/
+    },
+
+    editUser(displayName, photoURL, handler) {
+
+        const user = firebase.auth().currentUser;
+
+        if (displayName) {
+            if (photoURL) {
+                user.updateProfile({
+                    displayName,
+                    photoURL
+                }).then(handler)
+            } else{
+                user.updateProfile({
+                    displayName
+                }).then(handler)
+            }
         }
     },
 
-    editUser(userName, userPhoto, handler) {
-        if (userName) {
-            this.user.displayName = userName;
-        }
-        if (userPhoto) {
-            this.user.photo = userPhoto;
-        }
-        handler();
-    },
-
-    getUser(email) {
+   getUser(email) {
         return listUsers.find((item) =>
             item.email === email);
     },
+
     authorizedUser(user) {
         this.user = user;
     },
@@ -233,7 +288,7 @@ const showAllPosts = () => {
 const init = () => {
 
     showAllPosts();
-    toggleAuthDom();
+    setUsers.initUser(toggleAuthDom);
 
     buttonNewPost.addEventListener('click', event => {
         event.preventDefault();
@@ -255,7 +310,7 @@ const init = () => {
 
     exitElem.addEventListener('click', event => {
         event.preventDefault();
-        setUsers.logOut(toggleAuthDom);
+        setUsers.logOut();
     });
 
     editElem.addEventListener('click', event => {
