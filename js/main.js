@@ -10,7 +10,6 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-
 console.log(firebase);
 
 const regExpValidEmail = /^\w+@\w+\.\w{2,}$/;
@@ -34,18 +33,8 @@ const postsWrapper = document.querySelector('.posts');
 const buttonNewPost = document.querySelector('.button-new-post');
 const addPostElem = document.querySelector('.add-post');
 
-const listUsers = [
-    {
-        email: 'vprokopchuk@pikadu.com',
-        password: '11111111',
-        displayName: 'Сказочник',
-    },
-    {
-        email: 'dlevchenko@pikadu.com',
-        password: '22222222',
-        displayName: 'Лёва',
-    },
-];
+const DEFAULT_PHOTO = userAvatarElem.src;
+
 
 const setUsers = {
 
@@ -63,15 +52,12 @@ const setUsers = {
         });
     },
 
-
-
+    // authorization
     logIn(email, password, handler) {
         if (!regExpValidEmail.test(email))
             return alert('email не валиден!');
 
         firebase.auth().signInWithEmailAndPassword(email, password)
-            //.then((data) => this.user = data.user)
-            //.then(handler)
             .catch( err => {
                 const errCode = err.code;
                 const errMessage = err.message;
@@ -92,6 +78,7 @@ const setUsers = {
         firebase.auth().signOut();
     },
 
+    // registration
     signUp(email, password, handler) {
         if (!regExpValidEmail.test(email))
             return alert('email не валиден!');
@@ -103,9 +90,9 @@ const setUsers = {
         firebase.auth()
             .createUserWithEmailAndPassword(email, password)
             .then(data => {
-                this.editUser(email.split('@')[0], null, handler)
+                this.editUser(email.split('@')[0], null, handler);
             })
-            .catch((err) => {
+            .catch(err => {
                 const errCode = err.code;
                 const errMessage = err.message;
                 if (errCode === 'auth/weak-password'){
@@ -120,17 +107,9 @@ const setUsers = {
 
                 console.log(err);
             });
+        },
 
-        /*if (!this.getUser(email)) {
-            const user = {email, password, displayName: email.split('@')[0]}
-            listUsers.push(user);
-            this.authorizedUser(user);
-            handler();
-        } else {
-            alert('Пользователь с таким email уже зарегистрирован');
-        }*/
-    },
-
+    // edit user profile
     editUser(displayName, photoURL, handler) {
 
         const user = firebase.auth().currentUser;
@@ -140,67 +119,66 @@ const setUsers = {
                 user.updateProfile({
                     displayName,
                     photoURL
-                }).then(handler)
+                }).then(handler);
             } else{
                 user.updateProfile({
                     displayName
-                }).then(handler)
+                }).then(handler);
             }
         }
     },
 
-   getUser(email) {
-        return listUsers.find((item) =>
-            item.email === email);
-    },
-
-    authorizedUser(user) {
-        this.user = user;
-    },
+    sendForget(email) {
+        firebase.auth().sendPasswordResetEmail(email)
+            .then(() => {
+                alert('Письмо отправлено');
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
 };
 
+const loginForget = document.querySelector('.login-forget');
+loginForget.addEventListener('click', event => {
+    event.preventDefault();
+    setUsers.sendForget(emailInput.value);
+    emailInput.value = '';
+})
+
 const setPosts = {
-    allPosts: [
-        {
-            title: 'Заголовлок поста1',
-            text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что ротмаленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему      букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его  снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первуюподпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составительагентство чтовопроса ведущими о решила одна алфавит!',
-            tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-            author: {displayName: 'Di', photo: 'https://cdnimg.rg.ru/img/content/168/10/26/kotik_d_850_d_850.jpg'},
-            date: '11.11.2020, 20:54:00',
-            like: 15,
-            comments: 4,
-        },
-        {
-            title: 'Заголовлок поста2',
-            text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что ротмаленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему      букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его  снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первуюподпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составительагентство чтовопроса ведущими о решила одна алфавит!',
-            tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-            author: {displayName: 'Vadim', photo: 'https://cdnimg.rg.ru/img/content/168/10/26/kotik_d_850_d_850.jpg'},
-            date: '10.11.2020, 20:54:00',
-            like: 14,
-            comments: 7,
-        },
-    ],
+    allPosts: [],
     addPost(title, text, tags, handler) {
 
+        const user = firebase.auth().currentUser;
+
+        console.log(user);
+
         this.allPosts.unshift({
+
+            id: `postID${(+new Date()).toString(16)}-${user.uid}`,
             title,
             text,
             tags: tags.split(',').map(item => item.trim()),
             author: {
                 displayName: setUsers.user.displayName,
-                photo: setUsers.user.photo,
+                photo: setUsers.user.photoURL,
             },
             date: new Date().toLocaleString(),
             like: 0,
             comments: 0,
         })
 
-        if (handler) {
+        firebase.database().ref('post').set(this.allPosts)
+            .then(() => this.getPosts(handler))
+    },
+    getPosts(handler) {
+        firebase.database().ref('post').on('value', snapshot => {
+            this.allPosts = snapshot.val() || [];
             handler();
-        }
+        });
     }
-
-}
+};
 
 const toggleAuthDom = () => {
     const user = setUsers.user;
@@ -210,7 +188,7 @@ const toggleAuthDom = () => {
         loginElem.style.display = 'none';
         userElem.style.display = '';
         userNameElem.textContent = user.displayName;
-        userAvatarElem.src = user.photo || userAvatarElem.src;
+        userAvatarElem.src = user.photoURL || DEFAULT_PHOTO;
         buttonNewPost.classList.add('visible');
     } else {
         loginElem.style.display = '';
@@ -287,23 +265,19 @@ const showAllPosts = () => {
 
 const init = () => {
 
-    showAllPosts();
-    setUsers.initUser(toggleAuthDom);
-
     buttonNewPost.addEventListener('click', event => {
         event.preventDefault();
         showAddPost();
     });
 
-    loginForm.addEventListener('submit', (event) => {
+    loginForm.addEventListener('submit', event => {
         event.preventDefault();
         setUsers.logIn(emailInput.value, passwordInput.value, toggleAuthDom)
         loginForm.reset();
     });
 
-    loginSignUp.addEventListener('click', (event) => {
+    loginSignUp.addEventListener('click', event => {
         event.preventDefault();
-        console.log('sign up el');
         setUsers.signUp(emailInput.value, passwordInput.value, toggleAuthDom);
         loginForm.reset();
     });
@@ -331,13 +305,18 @@ const init = () => {
         menu.classList.toggle('visible');
     });
 
-    addPostElem.addEventListener('submit', (event) => {
+    loginForget.addEventListener('click', event => {
+        event.preventDefault();
+
+        setUsers.sendForget(emailInput.value);
+        emailInput.value = '';
+    });
+
+    addPostElem.addEventListener('submit', event => {
         event.preventDefault();
 
         const formElements = addPostElem.elements;
-        console.log(formElements);
         const {title, text, tags} = formElements;
-        console.log(title, text, tags);
         if (title.value.left < 4){
             alert('Слишком короткий заголовок');
             return ;
@@ -352,6 +331,10 @@ const init = () => {
         addPostElem.reset();
 
     });
+
+    setUsers.initUser(toggleAuthDom);
+    setPosts.getPosts(showAllPosts);
 }
 
+//run js after loading DOM
 document.addEventListener('DOMContentLoaded', init);
