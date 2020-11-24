@@ -162,7 +162,7 @@ const setPosts = {
             tags: tags.split(',').map(item => item.trim()),
             author: {
                 displayName: setUsers.user.displayName,
-                photo: setUsers.user.photoURL,
+                photoURL: setUsers.user.photoURL,
             },
             date: new Date().toLocaleString(),
             like: 0,
