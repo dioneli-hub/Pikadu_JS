@@ -36,7 +36,10 @@
       <workItem from="1605362261459" duration="940000" />
       <workItem from="1605464772374" duration="1924000" />
       <workItem from="1605872880131" duration="18376000" />
-      <workItem from="1606217821550" duration="2429000" />
+      <workItem from="1606217821550" duration="3819000" />
+      <workItem from="1606295969814" duration="3714000" />
+      <workItem from="1607780170625" duration="1002000" />
+      <workItem from="1607781420310" duration="4846000" />
     </task>
     <servers />
   </component>
@@ -44,10 +47,14 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="391" y="50" width="583" height="656" key="find.popup" timestamp="1605180019511">
+    <state x="363" y="100" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1607781121430">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="391" y="50" width="583" height="656" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1605180019511" />
+    <state x="363" y="100" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1366.728@0.0.1366.728" timestamp="1607781121430" />
+    <state x="391" y="50" width="583" height="656" key="find.popup" timestamp="1606299321826">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="391" y="50" width="583" height="656" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1606299321826" />
     <state x="650" y="49" key="search.everywhere.popup" timestamp="1605180025992">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

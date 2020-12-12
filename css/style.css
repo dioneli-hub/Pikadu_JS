@@ -174,9 +174,30 @@ body {
     fill: #8c8c8c;
 }
 
+.post-button .icon-like:hover {
+    fill: #f50057;
+}
+
+.post-button .icon-comment:hover {
+    fill: #0088ff;
+}
+
+.post-button .icon-save:hover {
+    fill: #22a900;
+}
+
+.post-button .icon-share:hover {
+    fill: #696060;
+}
+
 .icon-like,
 .icon-comment {
     margin-right: 6px;
+}
+
+.icon,
+.icon-like:active {
+    fill: #f50057;
 }
 
 .post-button {

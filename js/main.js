@@ -1,3 +1,9 @@
+/* todo
+* fix photo display when posting
+* likes
+* comments
+* */
+
 const firebaseConfig = {
     apiKey: "AIzaSyDvqXaFgFPef0IEHuj3cjiza-_IpnIojXI",
     authDomain: "pikadu-55291.firebaseapp.com",
@@ -32,6 +38,7 @@ const userAvatarElem = document.querySelector('.user-avatar');
 const postsWrapper = document.querySelector('.posts');
 const buttonNewPost = document.querySelector('.button-new-post');
 const addPostElem = document.querySelector('.add-post');
+//const likeButton = document.querySelector('.likes');
 
 const DEFAULT_PHOTO = userAvatarElem.src;
 
@@ -166,6 +173,7 @@ const setPosts = {
             },
             date: new Date().toLocaleString(),
             like: 0,
+
             comments: 0,
         })
 
@@ -177,7 +185,11 @@ const setPosts = {
             this.allPosts = snapshot.val() || [];
             handler();
         });
-    }
+    },
+
+/*    addLike(handler){
+        //todo add like
+    }*/
 };
 
 const toggleAuthDom = () => {
@@ -253,7 +265,7 @@ const showAllPosts = () => {
                         <a href="#" class="author-username">${author.displayName}</a>
                         <span class="post-time">${date}</span>
                     </div>
-                    <a href="#" class="author-link"><img src=${author.photo || 'img/avatar.jpeg'} alt="avatar" class="author-avatar"></a>
+                    <a href="#" class="author-link"><img src=${author.photoURL || 'img/avatar.jpeg'} alt="avatar" class="author-avatar"></a>
                 </div>
             </div>
         </section>`
@@ -264,6 +276,11 @@ const showAllPosts = () => {
 
 
 const init = () => {
+
+/*    likeButton.addEventListener('click', event => {
+        event.preventDefault();
+        setPosts.addLike();
+    });*/
 
     buttonNewPost.addEventListener('click', event => {
         event.preventDefault();
